@@ -18,7 +18,7 @@ class Entity:
     
     def hovered(self, mouse_pos:Vector2|tuple) -> bool:
 
-        if isinstance(mouse_pos, tuple): mouse_pos = Vector2().to_tuple(mouse_pos)
+        if isinstance(mouse_pos, tuple): mouse_pos = Vector2().from_tuple(mouse_pos)
 
         img_size = Vector2(self.img.get_width(), self.img.get_height())
         real_pos = self.pos - img_size * self.pivot
