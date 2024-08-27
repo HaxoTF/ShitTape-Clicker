@@ -1,3 +1,6 @@
+from tricks import *
+import math
+
 class Vector2:
     def __init__(self, x:float=0, y:float=0) -> None:
         if not (isinstance(x, (int, float)) and isinstance(y, (int, float))):
@@ -18,6 +21,19 @@ class Vector2:
     
     def to_tuple(self) -> tuple[float, float]:
         return (self.x, self.y)
+    
+    def move_towards(self, target:"Vector2", by:float) -> None:
+        self.x = move_towards(self.x, target.x, by)
+        self.y = move_towards(self.y, target.y, by)
+    
+    def to_angle(self) -> float:
+        return math.degrees(math.atan2(self.y, self.x))
+
+    def from_angle(self, angle:float) -> "Vector2":
+        radians = math.radians(angle)
+        self.x = math.cos(radians)
+        self.y = math.sin(radians)
+        return self
 
     # ------------------------------ SPECIAL METHODS -----------------------------------
 
