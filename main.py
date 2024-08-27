@@ -3,7 +3,8 @@ import images as img
 import math
 from vector import *
 from entity import *
-from nums import *
+from fontman import *
+from holder import *
 
 screen_size = Vector2(1280, 720)
 half_size = screen_size/2
@@ -19,18 +20,18 @@ window = pg.display.set_mode(screen_size.to_tuple())
 clock = pg.time.Clock()
 
 # objects
-obj_paper = Entity(half_size.copy(), 0, img.toilet_paper)
+obj_paper = Entity(Vector2(300, half_size.y+100), 0, img.toilet_paper)
 cos_timer = 0
+click_timer = 0
 
 paper = 0
-paper_numman = NumMan().load("./images/nums")
 
 running = True
 while running:
 
     delta_time = clock.get_time()/1000
     cos_timer += delta_time
-    if cos_timer >= 44: cos_timer -= 44
+    if cos_timer >= 11264: cos_timer -= 11264
     
     # Events
     for event in pg.event.get():
@@ -41,12 +42,19 @@ while running:
 
             if obj_paper.hovered(mouse_pos):
                 paper += 1
+                click_timer = 1
     
-    window.fill(pg.Color(50, 100, 255))
+    window.fill(pg.Color(20, 20, 20))
 
-    window.blit(paper_numman.render(paper), (10, 10))
-    obj_paper.pivot.y = 0.5-math.cos(cos_timer*2)/10
-    obj_paper.angle = 3-math.cos(cos_timer)*6
+    # Score
+    nums_ent = fontmans["MBlack"].convert(paper, obj_paper.pos+Vector2(0, -300), Vector2(0.5, 0.5))
+    for i in range(0, len(nums_ent)):
+        nums_ent[i].pivot.y = math.cos((cos_timer+(i/4))*4)/8
+    draw_many(window, nums_ent)
+
+    # Toilet paper
+    obj_paper.pivot.y = 0.5-math.cos(cos_timer)/16
+    obj_paper.angle = 3-math.cos(cos_timer/2)*6
     obj_paper.auto_draw(window)
 
     # Finally
