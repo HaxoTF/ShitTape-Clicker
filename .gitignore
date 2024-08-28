@@ -3,4 +3,5 @@ dist
 build
 *.spec
 save.json
+save.bin
 *.png~

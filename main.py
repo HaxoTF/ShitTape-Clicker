@@ -7,7 +7,7 @@ from fontman import *
 from holder import *
 from pgextras import *
 from copy import copy
-import json
+import pickle
 
 screen_size = Vector2(1280, 720)
 half_size = screen_size/2
@@ -41,16 +41,16 @@ def save_game():
         "money" : paper,
         "ups" : ups_d
     }
-    with open("save.json", "w") as f:
-        json.dump(data, f, indent=4)
+    with open("save.bin", "wb") as f:
+        pickle.dump(data, f)
 
 def load_game():
     global paper, ups
 
-    path = "save.json"
+    path = "save.bin"
     if not os.path.exists(path): return
-    with open(path, "r") as f:
-        data = json.load(f)
+    with open(path, "rb") as f:
+        data = pickle.load(f)
     paper = data["money"]
     for ud in data["ups"]:
         u = ups[ud["key"]]
