@@ -8,7 +8,8 @@ imgs :Dict[str, pg.Surface] = {
     "ToiletPaper" : pg.image.load("images/toilet_paper.png"),
     "ToiletLeaf"  : pg.image.load("images/toilet_leaf.png"),
     "UpPlate"     : pg.image.load("images/up_plate.png"),
-    "RichUpPlate"     : pg.image.load("images/rich_up_plate.png"),
+    "RichUpPlate" : pg.image.load("images/rich_up_plate.png"),
+    "Shine"       : pg.image.load("images/shine.png")
 }
 
 fontmans :Dict[str, FontMan] = {

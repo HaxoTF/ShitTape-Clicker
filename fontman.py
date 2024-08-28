@@ -8,12 +8,15 @@ special_index = [
     [".", "dot"],
     ["!", "exclamation"],
     ["?", "question"],
+
     ["$", "dollar"],
     ["#", "hash"],
 
-    # Math
     ["-",  "minus"],
-    ["+",  "plus"]
+    ["+",  "plus"],
+    ["/",  "slash"],
+    ["\\", "backslash"],
+    ["*",  "star"]
 ]
 
 class FontMan:
