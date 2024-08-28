@@ -6,10 +6,10 @@ from random import randint
 
 class Entity:
     def __init__(self, pos:Vector2=Vector2(0, 0), angle=0, img:pg.Surface=None, pivot:Vector2=Vector2(0.5, 0.5)):
-        self.pos :Vector2 = pos
+        self.pos :Vector2 = pos.copy()
         self.angle :float = angle
         self.img :pg.Surface = img
-        self.pivot :Vector2 = pivot
+        self.pivot :Vector2 = pivot.copy()
     
     def auto_draw(self, window:pg.Surface):
 
@@ -32,16 +32,18 @@ class Entity:
 
 
 class RigidEntity(Entity):
-    def __init__(self, pos:Vector2=Vector2(0, 0), angle=0, img:pg.Surface=None, pivot:Vector2=Vector2(0.5, 0.5), base_vel:Vector2=Vector2(0, 0), vel_speed:float=1, gravity:float=1):
-        super().__init__(pos, angle, img, pivot)
-        self.vel       :Vector2 = base_vel
-        self.vel_speed :float   = vel_speed
-        self.gravity   :float   = gravity
+    def __init__(self, pos:Vector2=Vector2(0, 0), angle_speed:float=0, img:pg.Surface=None, pivot:Vector2=Vector2(0.5, 0.5), base_vel:Vector2=Vector2(0, 0), vel_speed:float=1, gravity:float=1):
+        super().__init__(pos, 0, img, pivot)
+        self.vel         :Vector2 = base_vel
+        self.vel_speed   :float   = vel_speed
+        self.gravity     :float   = gravity
+        self.angle_speed :float   = angle_speed
     
     def process(self, delta_time:float):
-
+        
         self.vel.move_towards(Vector2(0, 0), self.vel_speed*delta_time)
-        self.vel.y += self.gravity*delta_time
+        self.vel.y += self.gravity*delta_time*self.vel_speed
+        self.angle += self.angle_speed*delta_time
         self.pos += self.vel
     
     def should_destroy(self, win_size:Vector2):
@@ -50,25 +52,23 @@ class RigidEntity(Entity):
 
 
 class Particles:
-    def __init__(self, base_pos:Vector2=Vector2(0, 0), base_angle:float=0, img:pg.Surface=None, base_pivot:Vector2=Vector2(0.5, 0.5), vel_speed:float=1, vel_power:float=1, gravity:float=1) -> None:
+    def __init__(self, img:pg.Surface=None, vel_speed:float=1, vel_power:float=1, gravity:float=1) -> None:
         self.rents :list[RigidEntity] = []
-        self.base_pos   :Vector2    = base_pos
-        self.base_angle :Vector2    = base_angle
         self.img        :pg.Surface = img
-        self.base_pivot :Vector2    = base_pivot
         self.vel_speed  :float      = vel_speed
         self.vel_power  :float      = vel_power
         self.gravity    :float      = gravity
     
-    def add_parts(self, count:int=1):
+    def add_parts(self, count:int=1, pos:Vector2=Vector2(0,0), angle_speed:float=0, arnd:tuple[int, int, int]=(0, 0, 350)):
         for i in range(0, count):
-            vel_angle = randint(0, 360)
+            vel_angle = randint(arnd[1], arnd[2]) + arnd[0]
+
             velocity = Vector2().from_angle(vel_angle) * self.vel_power
             self.rents.append(RigidEntity(
-                self.base_pos.copy(),
-                self.base_angle,
+                pos.copy(),
+                angle_speed,
                 self.img,
-                self.base_pivot,
+                Vector2(0.5, 0.5),
                 velocity,
                 self.vel_speed,
                 self.gravity
@@ -109,3 +109,9 @@ def ents_to_sur(entities:list[Entity]) -> pg.Surface:
         sur.blit(ent.img, dest.to_tuple())
     
     return sur
+
+
+
+def cos_wave(entities:list[Entity], timer:float, itensity:float=1, frequency:float=1) -> None:
+    for i in range(0, len(entities)):
+        entities[i].pivot.y = 0.5+math.cos(timer+(i/frequency)*frequency) * itensity

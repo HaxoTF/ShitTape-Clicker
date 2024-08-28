@@ -76,6 +76,10 @@ class FontMan:
         
         return ents
 
+    def to_sur(self, text:int, font_size:float=1) -> pg.Surface:
+        ents = self.convert(text, Vector2(0, 0), Vector2(0.5, 0.5), font_size)
+        return ents_to_sur(ents)
+
     def get_index(self, char:str) -> int:
 
         for i in range(0, len(self.ident)):
