@@ -103,7 +103,9 @@ while running:
     # Events
     for event in pg.event.get():
         if event.type == pg.QUIT:
+            save_game()
             running = False
+
         if event.type == pg.MOUSEBUTTONDOWN:
 
             if obj_paper.hovered(mouse_pos.to_tuple()):
@@ -178,11 +180,5 @@ while running:
     # Finally
     clock.tick(60)
     pg.display.update()
-
-    # Save logic
-    save_timer += delta_time
-    if save_timer >= 10:
-        save_timer = 0
-        save_game()
     
 pg.quit()
