@@ -68,7 +68,7 @@ cos_timer = 0
 paper_timer = 0
 sec_timer = 0
 save_timer = 0
-
+bg_scrl_timer = 0
 
 load_game()
 
@@ -76,12 +76,17 @@ running = True
 while running:
 
     # Main Info
-    delta_time = clock.get_time()/1000
+    ms_delta_time = clock.get_time()
+    delta_time = ms_delta_time/1000
+
     cos_timer += delta_time
     angle_timer += delta_time
     sec_timer += delta_time
+    bg_scrl_timer += delta_time
+
     if cos_timer >= 11264: cos_timer -= 11264
     if angle_timer >= 360: angle_timer -= 360
+    if bg_scrl_timer >= 0.9: bg_scrl_timer -= 0.9
     mouse_pos = Vector2().from_tuple(pg.mouse.get_pos())
 
     # Second timer logic
@@ -126,7 +131,6 @@ while running:
                         if k=="click": part_paper.img = fontmans["MBlack"].to_sur(f"+{up.level}", font_size=0.5)
                         break
                 
-    
     window.fill(pg.Color(20, 20, 20))
 
     # FPS
